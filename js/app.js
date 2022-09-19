@@ -1,5 +1,7 @@
 let ball; 
 let grass;
+let textureLeft1;
+let textureLeft2;
 let player1;
 
 
@@ -15,7 +17,7 @@ class MainScene extends Phaser.Scene {
         this.load.image("grass", "./assets/img/Environment/grass.png");
         this.load.image("goal_1", "./assets/img/Environment/goal_1.png");
         this.load.image("goal_2", "./assets/img/Environment/goal_2.png");
-        /* --- */ 
+        /* --- */
     
         /* Sprites */ 
         this.load.image("ball", "./assets/img/Ball/ball1.png");
@@ -26,14 +28,30 @@ class MainScene extends Phaser.Scene {
     }
  
     create(){
-        /* Enviroment */ 
-       grass =  this.physics.add.image(200, 570, 'grass').setScale(10, 1);
-       grass.body.allowGravity = false;
-       grass.setImmovable();
 
+        /* texture */
+            let rect = this.make.graphics().fillStyle(0x00ff00).fillRect(0, 0, 250, 10);
+            rect.generateTexture('hudbar', 250, 10);
+            rect.destroy();
+
+            let rect2 = this.make.graphics().fillStyle(0x00ff00).lineTo(400, 300, 400, 200);
+            rect2.generateTexture('hudbar2', 250, 10);
+            rect2.destroy();
+            this.add.image(500, 300, 'hudbar2');
+        /* --- */
+
+        /* Enviroment */ 
+        grass =  this.physics.add.image(200, 570, 'grass').setScale(10, 1);
+        grass.body.allowGravity = false;
+        grass.setImmovable();
         this.add.image(68, 442, 'goal_2').setScale(1, .8);
         this.add.image(732, 442, 'goal_1').setScale(1, .8);
-        /* --- */ 
+
+        textureLeft1 = this.physics.add.image(72, 350, 'hudbar').setScale(.5, 1);
+        textureLeft1.setImmovable(true);
+        textureLeft1.body.allowGravity = false; 
+
+        /* --- */
 
         /* Ball */
         ball = this.physics.add.sprite(400, 300, 'ball').setBounce(1);
@@ -41,7 +59,7 @@ class MainScene extends Phaser.Scene {
         /* --- */ 
 
         /* Player 1 */
-        player1 = this.physics.add.sprite(168, 442, "player1").setScale(.1);
+        player1 = this.physics.add.sprite(168, 442, "player1").setScale(.3);
         player1.setCollideWorldBounds(true);
         player1.setBounce(0.2);
         player1.setSize(220, 450, false);
@@ -75,6 +93,7 @@ class MainScene extends Phaser.Scene {
         this.physics.add.collider(ball, grass);
         this.physics.add.collider(player1, grass);
         this.physics.add.collider(player1, ball);
+        this.physics.add.collider(ball, textureLeft1);
     }
 
     update(){
